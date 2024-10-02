@@ -6,7 +6,7 @@ st.title("Tablero para dibujo")
 with st.sidebar:
   st.subheader("Propiedades del Tablero")
   drawing_mode = st.sidebar.selectbox(
-    "Drawing tool:",
+    "Herramienta de Dibujo:",
     ("freedraw", "line", "rect", "circle", "transform", "polygon", "point"),
   )
   
