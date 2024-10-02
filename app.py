@@ -20,8 +20,8 @@ canvas_result = st_canvas(
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
-    height=400,
-    width=300,
+    height=300,
+    width=500,
     drawing_mode=drawing_mode,
     key="canvas",
 )
