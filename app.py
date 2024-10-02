@@ -3,10 +3,11 @@ from streamlit_drawable_canvas import st_canvas
 
 st.title("Tablero para dibujo")
 
-drawing_mode = "freedraw"
-stroke_width = st.slider('Selecciona el ancho de línea', 1, 30, 15)
-stroke_color = '#FFFFFF' # Set background color 
-bg_color = '#000000'
+with st.sidebar:
+  drawing_mode = "freedraw" #line, rect, circle, point polygon
+  stroke_width = st.slider('Selecciona el ancho de línea', 1, 30, 15)
+  stroke_color = '#FFFFFF' # Set background color '#000000'
+  bg_color = '#000000'
 
 # Create a canvas component
 canvas_result = st_canvas(
