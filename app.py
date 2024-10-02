@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 
+st.title("Tablero para dibujo")
 
 drawing_mode = "freedraw"
 stroke_width = st.slider('Selecciona el ancho de línea', 1, 30, 15)
