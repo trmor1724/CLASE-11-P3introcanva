@@ -4,6 +4,7 @@ from streamlit_drawable_canvas import st_canvas
 st.title("Tablero para dibujo")
 
 with st.sidebar:
+  st.subheader("Propiedades del Tablero")
   drawing_mode = st.sidebar.selectbox(
     "Drawing tool:",
     ("freedraw", "line", "rect", "circle", "transform", "polygon", "point"),
