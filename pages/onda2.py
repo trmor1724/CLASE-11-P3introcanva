@@ -57,7 +57,8 @@ def create_static_wave():
     ax.axis('off')
 
     x = np.linspace(0, 2*np.pi, 1000)
-    y = np.sin(5*x) * np.exp(-0.1 * ((x - np.pi) ** 2))
+    #y = np.sin(5*x) * np.exp(-0.1 * ((x - np.pi) ** 2))
+    y = np.zeros_like(x)
     ax.plot(x, y, lw=2)
 
     # Guardar la imagen estática
