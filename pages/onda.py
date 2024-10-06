@@ -3,8 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import matplotlib.animation as animation
-from PIL import Image
-import io
+from IPython.display import HTML
 
 def create_voice_wave_animation():
     # Configuración de la figura
@@ -31,17 +30,11 @@ def create_voice_wave_animation():
     # Crear la animación
     anim = FuncAnimation(fig, animate, init_func=init, frames=200, interval=30, blit=True)
 
-    # Guardar la animación como una lista de imágenes
-    images = []
-    for i in range(100):  # Reducimos el número de frames para mayor eficiencia
-        anim._draw_frame(i)
-        buf = io.BytesIO()
-        fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0)
-        buf.seek(0)
-        images.append(Image.open(buf))
-    
-    plt.close(fig)
-    return images
+    # Convertir la animación a HTML5 video
+    html = animation.HTMLWriter().to_html(anim)
+    plt.close(fig)  # Cerrar la figura para liberar memoria
+
+    return html
 
 # Aplicación Streamlit
 
