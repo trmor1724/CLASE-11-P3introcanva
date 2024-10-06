@@ -1,45 +1,51 @@
-import streamlit as st
+mport streamlit as st
 import numpy as np
-import plotly.graph_objs as go
-import time
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import matplotlib.animation as animation
+import io
 
-# Configuración de la página
-st.set_page_config(
-    page_title="Animación de Onda Vibrante",
-    layout="wide",
-)
+def create_voice_wave_animation():
+    # Configuración de la figura
+    fig, ax = plt.subplots(figsize=(10, 3))
+    ax.set_xlim(0, 2*np.pi)
+    ax.set_ylim(-1, 1)
+    ax.axis('off')
 
-# Generar datos de la onda
-def generar_onda(frecuencia, amplitud, tiempo, muestreo):
-    t = np.linspace(0, tiempo, int(tiempo * muestreo), endpoint=False)
-    onda = amplitud * np.sin(2 * np.pi * frecuencia * t)
-    return t, onda
+    # Crear la línea inicial
+    line, = ax.plot([], [], lw=3)
 
-# Configuración inicial
-frecuencia = 2  # Frecuencia en Hz
-amplitud = 1  # Amplitud de la onda
-tiempo = 5  # Duración en segundos
-muestreo = 500  # Frecuencia de muestreo en Hz
+    # Función de inicialización
+    def init():
+        line.set_data([], [])
+        return line,
 
-# Crear la animación de la onda
-st.title("Animación de Onda Vibrante")
-placeholder = st.empty()
+    # Función de animación
+    def animate(i):
+        x = np.linspace(0, 2*np.pi, 1000)
+        y = np.sin(5*x + i/10) * np.exp(-0.1 * ((x - np.pi) ** 2))
+        line.set_data(x, y)
+        return line,
 
-t, onda = generar_onda(frecuencia, amplitud, tiempo, muestreo)
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=t, y=onda, mode="lines"))
+    # Crear la animación
+    anim = FuncAnimation(fig, animate, init_func=init, frames=200, interval=30, blit=True)
 
-# Configurar la gráfica
-fig.update_layout(
-    xaxis_title="Tiempo (s)",
-    yaxis_title="Amplitud",
-    title="Sistema de Voz en Reproducción",
-    yaxis=dict(range=[-1.5, 1.5]),
-    xaxis=dict(range=[0, tiempo]),
-)
+    # Guardar la animación como un gif en memoria
+    buf = io.BytesIO()
+    anim.save(buf, writer='pillow', fps=30)
+    buf.seek(0)
+    
+    return buf
 
-# Mostrar la animación en Streamlit
-for i in range(1, len(t)):
-    fig.update_traces(go.Scatter(x=t[:i], y=onda[:i], mode="lines"))
-    placeholder.write(fig.to_html(), unsafe_allow_html=True)
-    time.sleep(0.01)
+# Aplicación Streamlit
+
+st.title("Simulación de Onda de Voz")
+st.write("Presiona el botón para activar la animación de la onda de voz.")
+
+# Crear un botón
+if st.button('Activar Animación'):
+    # Crear y mostrar la animación
+    animation_buf = create_voice_wave_animation()
+    st.image(animation_buf, use_column_width=True)
+else:
+    st.write("La animación se mostrará aquí cuando actives el botón.")
