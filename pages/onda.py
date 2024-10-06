@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import matplotlib.animation as animation
-import base64
 from io import BytesIO
 
 def create_voice_wave_animation():
@@ -31,26 +30,30 @@ def create_voice_wave_animation():
     # Crear la animación
     anim = FuncAnimation(fig, animate, init_func=init, frames=200, interval=30, blit=True)
 
-    # Guardar la animación como un gif
-    buffer = BytesIO()
-    anim.save(buffer, writer='pillow', format='gif')
-    buffer.seek(0)
-    
-    # Codificar el gif en base64
-    gif_base64 = base64.b64encode(buffer.getvalue()).decode()
-    
+    # Guardar la animación como HTML
+    html_io = BytesIO()
+    anim.save(html_io, writer='html', fps=30)
+    html = html_io.getvalue().decode()
+
     plt.close(fig)  # Cerrar la figura para liberar memoria
 
-    return gif_base64
+    return html
 
 # Aplicación Streamlit
+def main():
+    st.title("Simulación de Onda de Voz")
+    st.write("Presiona el botón para activar la animación de la onda de voz.")
+    
+    # Crear un botón
+    if st.button('Activar Animación'):
+        # Crear y mostrar la animación
+        animation_html = create_voice_wave_animation()
+        st.components.v1.html(animation_html, height=300)
+    else:
+        st.write("La animación se mostrará aquí cuando actives el botón.")
 
-st.title("Simulación de Onda de Voz")
-st.write("Presiona el botón para activar la animación de la onda de voz.")
-
-# Crear un botón
-if st.button('Activar Animación'):
-    # Crear y mostrar la animación
+if __name__ == "__main__":
+    main()
     gif_base64 = create_voice_wave_animation()
     html = f'<img src="data:image/gif;base64,{gif_base64}" alt="voice wave animation">'
     st.components.v1.html(html, height=300)
