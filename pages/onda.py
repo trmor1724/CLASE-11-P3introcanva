@@ -40,23 +40,17 @@ def create_voice_wave_animation():
     return html
 
 # Aplicación Streamlit
-def main():
-    st.title("Simulación de Onda de Voz")
-    st.write("Presiona el botón para activar la animación de la onda de voz.")
-    
-    # Crear un botón
-    if st.button('Activar Animación'):
-        # Crear y mostrar la animación
-        animation_html = create_voice_wave_animation()
-        st.components.v1.html(animation_html, height=300)
-    else:
-        st.write("La animación se mostrará aquí cuando actives el botón.")
 
-if __name__ == "__main__":
-    main()
-    gif_base64 = create_voice_wave_animation()
-    html = f'<img src="data:image/gif;base64,{gif_base64}" alt="voice wave animation">'
-    st.components.v1.html(html, height=300)
+st.title("Simulación de Onda de Voz")
+st.write("Presiona el botón para activar la animación de la onda de voz.")
+
+# Crear un botón
+if st.button('Activar Animación'):
+    # Crear y mostrar la animación
+    animation_html = create_voice_wave_animation()
+    st.components.v1.html(animation_html, height=300)
 else:
     st.write("La animación se mostrará aquí cuando actives el botón.")
+
+
 
