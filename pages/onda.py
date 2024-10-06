@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import matplotlib.animation as animation
-from IPython.display import HTML
+import base64
+from io import BytesIO
 
 def create_voice_wave_animation():
     # Configuración de la figura
@@ -30,11 +31,17 @@ def create_voice_wave_animation():
     # Crear la animación
     anim = FuncAnimation(fig, animate, init_func=init, frames=200, interval=30, blit=True)
 
-    # Convertir la animación a HTML5 video
-    html = animation.HTMLWriter().to_html(anim)
+    # Guardar la animación como un gif
+    buffer = BytesIO()
+    anim.save(buffer, writer='pillow', format='gif')
+    buffer.seek(0)
+    
+    # Codificar el gif en base64
+    gif_base64 = base64.b64encode(buffer.getvalue()).decode()
+    
     plt.close(fig)  # Cerrar la figura para liberar memoria
 
-    return html
+    return gif_base64
 
 # Aplicación Streamlit
 
@@ -44,7 +51,9 @@ st.write("Presiona el botón para activar la animación de la onda de voz.")
 # Crear un botón
 if st.button('Activar Animación'):
     # Crear y mostrar la animación
-    animation_buf = create_voice_wave_animation()
-    st.image(animation_buf, use_column_width=True)
+    gif_base64 = create_voice_wave_animation()
+    html = f'<img src="data:image/gif;base64,{gif_base64}" alt="voice wave animation">'
+    st.components.v1.html(html, height=300)
 else:
     st.write("La animación se mostrará aquí cuando actives el botón.")
+
