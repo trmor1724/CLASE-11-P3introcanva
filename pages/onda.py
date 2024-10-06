@@ -2,9 +2,9 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-import matplotlib.animation as animation
+import tempfile
 import base64
-from io import BytesIO
+import os
 
 def create_voice_wave_animation():
     # Configuración de la figura
@@ -31,12 +31,19 @@ def create_voice_wave_animation():
     # Crear la animación
     anim = FuncAnimation(fig, animate, init_func=init, frames=100, interval=50, blit=True)
 
-    # Guardar la animación como gif
-    f = BytesIO()
-    anim.save(f, writer='pillow', fps=25)
-    plt.close(fig)
+    # Crear un archivo temporal
+    with tempfile.NamedTemporaryFile(suffix='.gif', delete=False) as temp_file:
+        # Guardar la animación como gif en el archivo temporal
+        anim.save(temp_file.name, writer='pillow', fps=25)
+        plt.close(fig)
 
-    b64 = base64.b64encode(f.getvalue()).decode('utf-8')
+        # Leer el archivo y codificarlo en base64
+        with open(temp_file.name, 'rb') as f:
+            gif_data = f.read()
+            b64 = base64.b64encode(gif_data).decode('utf-8')
+
+    # Eliminar el archivo temporal
+    os.unlink(temp_file.name)
 
     return b64
 
@@ -53,6 +60,7 @@ if st.button('Activar Animación'):
     st.markdown(html, unsafe_allow_html=True)
 else:
     st.write("La animación se mostrará aquí cuando actives el botón.")
+
 
 
 
