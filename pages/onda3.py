@@ -80,7 +80,7 @@ if 'static_img' not in st.session_state:
     st.session_state.static_img = create_static_wave()
 
 # Cargar un archivo de audio de ejemplo
-audio_file = open('path_to_your_audio_file.mp3', 'rb')  # Reemplaza con la ruta a tu archivo de audio
+audio_file = open('oraculo.mp3', 'rb')  # Reemplaza con la ruta a tu archivo de audio
 audio_bytes = audio_file.read()
 
 # Crear un widget de audio con un callback
